@@ -1,28 +1,28 @@
 class Solution {
 public:
-    //We know the merged array would habe n + m elements
-    //So the median would be (n + m)/2 if odd or abv((m+n)/2, (m+n)/2 + 1)) if even
-    //We dont need to iterate all elements, just ~(m+n)/2 elements
-    //Complexity O(m+n)
+    //This solution was based on editorial approach 3
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        size_t n = nums1.size(), m = nums2.size();
-        size_t odd = (n + m) % 2;
-        size_t mid = (n+m)/2 + 1;
-        size_t p1 = 0, p2 = 0;
-        int prev = 0, cur = 0;
+        auto& A = nums1.size() <= nums2.size() ? nums1 : nums2;
+        auto& B = nums1.size() <= nums2.size() ? nums2 : nums1;
+        size_t n = A.size(), m = B.size();
+        size_t left = 0, right = n;
+        while (left <= right) {
+            size_t partitionA = (left + right)/2;
+            size_t partitionB = (n + m + 1)/2 - partitionA;
 
-        for (size_t i = 0; i < mid; ++i) {
-            prev = cur;
-            if (p1 < n && (p2 >= m || nums1[p1] < nums2[p2])) {
-                cur = nums1[p1++];
+            int maxLeftA = (partitionA != 0) ? A[partitionA - 1] : INT_MIN;
+            int minRightA = (partitionA != n) ? A[partitionA] : INT_MAX;
+            int maxLeftB = (partitionB != 0) ? B[partitionB - 1] : INT_MIN;
+            int minRightB = (partitionB != m) ? B[partitionB] : INT_MAX;
+
+            if (maxLeftA <= minRightB && maxLeftB <= minRightA) {
+                return (n+m)%2 ? max(maxLeftA, maxLeftB) : (max(maxLeftA, maxLeftB) + min(minRightA, minRightB)) / 2.0;
+            } else if (maxLeftA > minRightB) {
+                right = partitionA - 1;
             } else {
-                cur = nums2[p2++];
+                left = partitionA + 1;
             }
         }
-
-        if (odd) {
-            return cur;
-        }
-        return (prev + cur) / 2.0;
+        return 0.0;
     }
 };
