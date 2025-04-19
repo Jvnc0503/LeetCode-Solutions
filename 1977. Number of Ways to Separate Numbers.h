@@ -18,11 +18,11 @@ public:
         return true;
     }
 
-    bool compareFaster(string& num, const int& startPrev, const int& startLast, const int& len) {
+    bool compareFaster(const string& num, const int& startPrev, const int& startLast, const int& len) {
         return memcmp(&num[startPrev], &num[startLast], len) <= 0;
     }
 
-    bool compareFastest(string& num, const int& startPrev, const int& startLast, const int& len, vector<vector<int>>& lcp) {
+    bool compareFastest(const string& num, const int& startPrev, const int& startLast, const int& len, const vector<vector<int>>& lcp) {
         int cl = lcp[startPrev][startLast];
         return cl >= len || num[startPrev+cl] < num[startLast+cl];
     }
@@ -41,6 +41,7 @@ public:
         // Used to know position where two numbers differ
         vector<vector<int>> lcp(n, vector<int>(n + 1, 0));
 
+        // Preprocesing lcp
         for (int i = n - 2; i >= 0; --i) {
             for (int j = i; j < n; ++j) {
                 if (num[i] == num[j]) {
@@ -60,8 +61,8 @@ public:
                 if (num[j] == '0') {
                     //dp[i][l] = 0;
                     cur = 0;
-                } else if (j == 0) {
-                    //dp[i][l] = 1;   // Base case, last numbers start at position 0
+                } else if (j == 0) {    // Base case, last numbers start at position 0
+                    //dp[i][l] = 1;
                     cur = 1;
                 } else {
                     // Max length the second last number can have so it can be less or equal to last number
