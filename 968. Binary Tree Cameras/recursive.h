@@ -20,8 +20,8 @@ public:
             return COVERED;
         }
         // Get the coverage of children
-        int left = dfs(root->left);
-        int right = dfs(root->right);
+        Coverage left = dfs(root->left);
+        Coverage right = dfs(root->right);
 
         if (left == NOT_COVERED || right == NOT_COVERED) {
             // If any of the children is not covered, we create a new camera on the current node
