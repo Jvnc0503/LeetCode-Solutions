@@ -37,6 +37,7 @@ public:
     }
 
     int minCameraCover(TreeNode* root) {
+        // If root has not been corvered we add a final camera
         if (dfs(root) == NOT_COVERED) {
             ++cameras;
         }
